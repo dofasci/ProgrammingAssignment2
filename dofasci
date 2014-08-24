@@ -1,0 +1,36 @@
+## The following functions used together can compute,
+## cache the inverse of a matrix, and evetnually retrieve
+## a value corresponding the a matrix inversion previously
+## cached to avoid recomputation.
+
+## The function makeCacheMatrix is able to set the value
+## of a "particular" matrix and to compute and cache its inverse. 
+
+makeCacheMatrix <- function(x = matrix(j, k, z)) {
+	inv <- NULL
+	set <- function(y) {
+		x <<- y
+	}
+	get <- function () x
+	setinv <- function(solve) {inv <<- solve}
+	getinv <- function() {inv}
+	list(set = set, get = get,
+	setinv = setinv, getinv = getinv)
+}
+
+## The function cacheSolve calculates the inverse of the
+## particular matrix defined by makeCacheMatrix, and if its
+## inverse has been previously calculated, cacheSolve will
+## retrieve it from the cache.
+
+cacheSolve <- function(x, ...) {
+	inv <- x$getinv()
+	if(!is.null(inv)) {
+	message("getting cached data")
+	return(inv)
+	}
+	data <- x$get()
+	inv <- solve(data, ...)
+	x$setinv(inv)
+	inv
+}
